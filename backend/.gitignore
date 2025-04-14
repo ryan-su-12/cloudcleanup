@@ -1,0 +1,11 @@
+# Go build artifacts
+*.exe
+*.out
+*.test
+
+# AWS credentials if you ever copy them (should not be in repo)
+*.csv
+
+# OS files
+.DS_Store
+
