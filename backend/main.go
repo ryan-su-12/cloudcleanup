@@ -3,21 +3,18 @@ package main
 import (
 	"log"
 	"net/http"
-
-	"github.com/ryan-su-12/cloudcleanup/backend/handlers"
-
+	"cloudcleanup/handlers-aws"
 	"github.com/gorilla/mux"
-	
+
 )
 
 func main() {
 	r := mux.NewRouter().StrictSlash(true)
 
-	// ✅ Apply CORS middleware globally
+	
 	r.Use(enableCORS)
 	log.Println("✅ CORS Middleware is now active")
 
-	// 🧪 Simple health check route
 	r.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
 		log.Println("✅ /ping endpoint hit")
 		w.Write([]byte("pong"))
@@ -28,28 +25,34 @@ func main() {
 	r.HandleFunc("/api/aws/resources", GetAWSResources).Methods("POST")
 	r.HandleFunc("/api/aws/delete", DeleteAWSResources).Methods("POST")
 		*/
-	// adding in some ec2 instace specifcs
+	// adding in some ec2 instace specifcs and s3 and rds
 	r.HandleFunc("/api/aws/resources", handlers.GetEC2Instances).Methods("POST")
 	r.HandleFunc("/api/aws/delete", handlers.DeleteEC2Instances).Methods("POST")
 
-	// ✅ Catch-all OPTIONS handler for preflight requests
+
+	r.HandleFunc("/api/aws/s3/resources", handlers.GetS3Buckets).Methods("POST")
+	r.HandleFunc("/api/aws/s3/delete", handlers.DeleteS3Buckets).Methods("POST")
+
+	r.HandleFunc("/api/aws/rds/resources", handlers.GetRDSInstances).Methods("POST")
+	r.HandleFunc("/api/aws/rds/delete", handlers.DeleteRDSInstances).Methods("POST")
+
+	r.HandleFunc("/api/aws/lambda/resources", handlers.GetLambdaFunctions).Methods("POST")
+	r.HandleFunc("/api/aws/lambda/delete", handlers.DeleteLambdaFunctions).Methods("POST")
+
 	r.Methods(http.MethodOptions).HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log.Println("✅ Global OPTIONS handler triggered for:", r.URL.Path)
 		w.WriteHeader(http.StatusOK)
 	})
 
-	// 🚫 Fallback for unknown paths
 	r.NotFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 		log.Printf("404 Not Found: %s %s\n", req.Method, req.URL.Path)
 		http.NotFound(w, req)
 	})
 
-	// 🚀 Start the server
 	log.Println("Server running on http://localhost:8080")
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
 
-// 🌐 CORS Middleware
 func enableCORS(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log.Println("🛡️ CORS middleware hit for:", r.Method, r.URL.Path)
