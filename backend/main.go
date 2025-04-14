@@ -4,7 +4,10 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/ryan-su-12/cloudcleanup/backend/handlers"
+
 	"github.com/gorilla/mux"
+	
 )
 
 func main() {
@@ -21,8 +24,13 @@ func main() {
 	}).Methods("GET")
 
 	// 🔗 Core AWS routes
+	/*
 	r.HandleFunc("/api/aws/resources", GetAWSResources).Methods("POST")
 	r.HandleFunc("/api/aws/delete", DeleteAWSResources).Methods("POST")
+		*/
+	// adding in some ec2 instace specifcs
+	r.HandleFunc("/api/aws/resources", handlers.GetEC2Instances).Methods("POST")
+	r.HandleFunc("/api/aws/delete", handlers.DeleteEC2Instances).Methods("POST")
 
 	// ✅ Catch-all OPTIONS handler for preflight requests
 	r.Methods(http.MethodOptions).HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
