@@ -6,13 +6,14 @@ import (
 	"cloudcleanup/handlers-aws"
 	"cloudcleanup/database"
 	"github.com/gorilla/mux"
+	_ "github.com/joho/godotenv/autoload" // 👈 used for side effects
 
 
 )
 
 func main() {
 
-	db.ConnectToSupabase()
+	database.ConnectToSupabase()
 	
 	r := mux.NewRouter().StrictSlash(true)
 
