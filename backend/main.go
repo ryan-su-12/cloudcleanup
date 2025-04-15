@@ -4,11 +4,16 @@ import (
 	"log"
 	"net/http"
 	"cloudcleanup/handlers-aws"
+	"cloudcleanup/database"
 	"github.com/gorilla/mux"
+
 
 )
 
 func main() {
+
+	db.ConnectToSupabase()
+	
 	r := mux.NewRouter().StrictSlash(true)
 
 	

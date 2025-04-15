@@ -5,11 +5,12 @@ import (
 	"fmt"
 	"log"
 
+	
 	"github.com/jackc/pgx/v5"
 )
 
 func ConnectToSupabase() *pgx.Conn {
-	url := "postgres://your_user:your_password@your_host:5432/your_database"
+	url := "postgresql://postgres:CloudDB_2025!@db.jkvisgpgreahkkhpoyal.supabase.co:5432/postgres"
 
 	conn, err := pgx.Connect(context.Background(), url)
 	if err != nil {
