@@ -9,22 +9,23 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 )
 
-type AWSRequest struct {
+type AWSRequestEC2 struct {
 	AccessKey string `json:"accessKey"`
 	SecretKey string `json:"secretKey"`
 	Region    string `json:"region"`
 }
 
-type DeleteRequest struct {
+type DeleteRequestEC2 struct {
 	AccessKey    string   `json:"accessKey"`
 	SecretKey    string   `json:"secretKey"`
 	Region       string   `json:"region"`
 	ResourceType string   `json:"resourceType"`
-	ResourceIds  []string `json:"resourceIds"`
+	ResourceIds  []string `json:"resourceIds"` // Instance IDs
 }
 
+
 func GetEC2Instances(w http.ResponseWriter, r *http.Request) {
-	var req AWSRequest
+	var req AWSRequestEC2
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "Invalid request", http.StatusBadRequest)
 		return
@@ -56,7 +57,7 @@ func GetEC2Instances(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteEC2Instances(w http.ResponseWriter, r *http.Request) {
-	var req DeleteRequest
+	var req DeleteRequestEC2
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return

@@ -6,16 +6,17 @@ import (
 	"net/http"
 
 	"cloudcleanup/utils"
+	"github.com/aws/aws-sdk-go-v2/aws"           // ✅ for aws.Bool
 	"github.com/aws/aws-sdk-go-v2/service/rds"
 )
 
-type AWSRequest struct {
+type AWSRequestRDS struct {
 	AccessKey string `json:"accessKey"`
 	SecretKey string `json:"secretKey"`
 	Region    string `json:"region"`
 }
 
-type DeleteRequest struct {
+type DeleteRequestRDS struct {
 	AccessKey    string   `json:"accessKey"`
 	SecretKey    string   `json:"secretKey"`
 	Region       string   `json:"region"`
@@ -24,7 +25,7 @@ type DeleteRequest struct {
 }
 
 func GetRDSInstances(w http.ResponseWriter, r *http.Request) {
-	var req AWSRequest
+	var req AWSRequestRDS
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "Invalid request", http.StatusBadRequest)
 		return
@@ -54,7 +55,7 @@ func GetRDSInstances(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteRDSInstances(w http.ResponseWriter, r *http.Request) {
-	var req DeleteRequest
+	var req DeleteRequestRDS
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return
@@ -72,7 +73,7 @@ func DeleteRDSInstances(w http.ResponseWriter, r *http.Request) {
 	for _, db := range req.ResourceIds {
 		_, err := client.DeleteDBInstance(context.TODO(), &rds.DeleteDBInstanceInput{
 			DBInstanceIdentifier: &db,
-			SkipFinalSnapshot:    true,
+			SkipFinalSnapshot:    aws.Bool(true), // ✅ Proper fix here
 		})
 		if err == nil {
 			deleted = append(deleted, db)

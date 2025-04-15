@@ -9,13 +9,13 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
-type AWSRequest struct {
+type AWSRequestS3 struct {
 	AccessKey string `json:"accessKey"`
 	SecretKey string `json:"secretKey"`
 	Region    string `json:"region"`
 }
 
-type DeleteRequest struct {
+type DeleteRequestS3 struct {
 	AccessKey    string   `json:"accessKey"`
 	SecretKey    string   `json:"secretKey"`
 	Region       string   `json:"region"`
@@ -24,7 +24,7 @@ type DeleteRequest struct {
 }
 
 func GetS3Buckets(w http.ResponseWriter, r *http.Request) {
-	var req AWSRequest
+	var req AWSRequestS3
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "Invalid request", http.StatusBadRequest)
 		return
@@ -54,7 +54,7 @@ func GetS3Buckets(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteS3Buckets(w http.ResponseWriter, r *http.Request) {
-	var req DeleteRequest
+	var req DeleteRequestS3
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return

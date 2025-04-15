@@ -9,13 +9,13 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/lambda"
 )
 
-type AWSRequest struct {
+type AWSRequestLambda struct {
 	AccessKey string `json:"accessKey"`
 	SecretKey string `json:"secretKey"`
 	Region    string `json:"region"`
 }
 
-type DeleteRequest struct {
+type DeleteRequestLambda struct {
 	AccessKey    string   `json:"accessKey"`
 	SecretKey    string   `json:"secretKey"`
 	Region       string   `json:"region"`
@@ -24,7 +24,7 @@ type DeleteRequest struct {
 }
 
 func GetLambdaFunctions(w http.ResponseWriter, r *http.Request) {
-	var req AWSRequest
+	var req AWSRequestLambda
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "Invalid request", http.StatusBadRequest)
 		return
@@ -54,7 +54,7 @@ func GetLambdaFunctions(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteLambdaFunctions(w http.ResponseWriter, r *http.Request) {
-	var req DeleteRequest
+	var req DeleteRequestLambda
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return
