@@ -9,12 +9,10 @@ import (
 	_ "github.com/joho/godotenv/autoload" // 👈 used for side effects
 
 
+
 )
 
 func main() {
-
-	database.ConnectToSupabase()
-	
 	r := mux.NewRouter().StrictSlash(true)
 
 	

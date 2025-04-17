@@ -31,7 +31,10 @@ require (
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
 	github.com/jackc/pgx/v5 v5.7.4 // indirect
+<<<<<<< HEAD:go.mod
 	github.com/joho/godotenv v1.5.1 // indirect
+=======
+>>>>>>> 6c6d9a33f0d26f5fea9b5c68321125e0023e4bb9:backend/go.mod
 	golang.org/x/crypto v0.31.0 // indirect
 	golang.org/x/text v0.21.0 // indirect
 )
