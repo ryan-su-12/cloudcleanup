@@ -3,8 +3,9 @@ package main
 import (
 	"log"
 	"net/http"
-	"cloudcleanup/handlers-aws"
-	"cloudcleanup/database"
+
+
+	"cloudcleanup/backend/handlersaws"
 	"github.com/gorilla/mux"
 
 
@@ -12,7 +13,6 @@ import (
 
 func main() {
 
-	db.ConnectToSupabase()
 	
 	r := mux.NewRouter().StrictSlash(true)
 
@@ -24,13 +24,8 @@ func main() {
 		log.Println("✅ /ping endpoint hit")
 		w.Write([]byte("pong"))
 	}).Methods("GET")
-
-	// 🔗 Core AWS routes
 	/*
-	r.HandleFunc("/api/aws/resources", GetAWSResources).Methods("POST")
-	r.HandleFunc("/api/aws/delete", DeleteAWSResources).Methods("POST")
-		*/
-	// adding in some ec2 instace specifcs and s3 and rds
+	// centralizing the routes that each aws service can have 
 	r.HandleFunc("/api/aws/resources", handlers.GetEC2Instances).Methods("POST")
 	r.HandleFunc("/api/aws/delete", handlers.DeleteEC2Instances).Methods("POST")
 
@@ -48,6 +43,10 @@ func main() {
 		log.Println("✅ Global OPTIONS handler triggered for:", r.URL.Path)
 		w.WriteHeader(http.StatusOK)
 	})
+		*/
+
+	r.HandleFunc("/api/aws/list-resources", handlers.ListAWSResources).Methods("POST")
+
 
 	r.NotFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 		log.Printf("404 Not Found: %s %s\n", req.Method, req.URL.Path)
@@ -58,6 +57,8 @@ func main() {
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
 
+
+// Getting perms from CORS for GO
 func enableCORS(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log.Println("🛡️ CORS middleware hit for:", r.Method, r.URL.Path)
