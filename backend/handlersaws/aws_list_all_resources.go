@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"cloudcleanup/backend/utils"  // LoadAWSConfig function
-	"cloudcleanup/backend/models"  // ✅ NEW import for shared Resource struct
+	"cloudcleanup/backend/models"  
 	"cloudcleanup/backend/aws"    // FetchEC2Instances, FetchS3Buckets, etc.
 )
 
@@ -17,11 +17,6 @@ type AWSRequestCommon struct {
 	Region    string `json:"region"`
 }
 
-// Unified Resource struct (matches services)
-type Resource struct {
-	ID   string `json:"id"`
-	Type string `json:"type"`
-}
 
 // ListAllAWSResources launches goroutines to fetch resources
 func ListAllAWSResources(w http.ResponseWriter, r *http.Request) {
@@ -58,8 +53,6 @@ func ListAllAWSResources(w http.ResponseWriter, r *http.Request) {
 		case res := <-resultChan:
 			allResources = append(allResources, res...)
 		case err := <-errorChan:
-			// Log the error, but continue to collect others
-			// (You can improve this later with better logging)
 			println("Fetch error:", err.Error())
 		}
 	}
