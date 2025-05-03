@@ -5,9 +5,10 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/sns"
+	"cloudcleanup/backend/models" // adjust as per actual module path
 )
 
-func FetchSNSTopics(cfg aws.Config, resultChan chan []Resource, errorChan chan error) {
+func FetchSNSTopics(cfg aws.Config, resultChan chan []models.Resource, errorChan chan error) {
 	client := sns.NewFromConfig(cfg)
 
 	resp, err := client.ListTopics(context.TODO(), &sns.ListTopicsInput{})
@@ -16,9 +17,9 @@ func FetchSNSTopics(cfg aws.Config, resultChan chan []Resource, errorChan chan e
 		return
 	}
 
-	var resources []Resource
+	var resources []models.Resource
 	for _, topic := range resp.Topics {
-		resources = append(resources, Resource{
+		resources = append(resources, models.Resource{
 			ID:   aws.ToString(topic.TopicArn),
 			Type: "sns",
 		})

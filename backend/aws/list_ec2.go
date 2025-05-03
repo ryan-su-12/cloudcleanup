@@ -5,13 +5,9 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
+	"cloudcleanup/backend/models" // adjust as per actual module path
 )
 
-// Resource struct for unified frontend rendering
-type Resource struct {
-	ID   string `json:"id"`
-	Type string `json:"type"`
-}
 
 // Fetch EC2 instances
 func FetchEC2Instances(cfg aws.Config, resultChan chan []models.Resource, errorChan chan error) {
@@ -24,10 +20,10 @@ func FetchEC2Instances(cfg aws.Config, resultChan chan []models.Resource, errorC
 		return
 	}
 
-	var resources []Resource
+	var resources []models.Resource
 	for _, reservation := range resp.Reservations {
 		for _, instance := range reservation.Instances {
-			resources = append(resources, Resource{
+			resources = append(resources, models.Resource{
 				ID:   aws.ToString(instance.InstanceId),
 				Type: "ec2",
 			})

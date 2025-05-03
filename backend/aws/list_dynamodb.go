@@ -5,9 +5,10 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
+	"cloudcleanup/backend/models" // adjust as per actual module path
 )
 
-func FetchDynamoDBTables(cfg aws.Config, resultChan chan []Resource, errorChan chan error) {
+func FetchDynamoDBTables(cfg aws.Config, resultChan chan []models.Resource, errorChan chan error) {
 	client := dynamodb.NewFromConfig(cfg)
 
 	resp, err := client.ListTables(context.TODO(), &dynamodb.ListTablesInput{})
@@ -16,9 +17,9 @@ func FetchDynamoDBTables(cfg aws.Config, resultChan chan []Resource, errorChan c
 		return
 	}
 
-	var resources []Resource
+	var resources []models.Resource
 	for _, tableName := range resp.TableNames {
-		resources = append(resources, Resource{
+		resources = append(resources, models.Resource{
 			ID:   tableName,
 			Type: "dynamodb",
 		})

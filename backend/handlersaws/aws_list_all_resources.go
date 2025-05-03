@@ -1,7 +1,7 @@
 package handlersaws
 
 import (
-	"context"
+
 	"encoding/json"
 	"net/http"
 

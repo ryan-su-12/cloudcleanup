@@ -45,7 +45,7 @@ func main() {
 	})
 		*/
 
-	r.HandleFunc("/api/aws/list-resources", handlers.ListAWSResources).Methods("POST")
+	r.HandleFunc("/api/aws/list-resources", handlersaws.ListAllAWSResources).Methods("POST")
 
 
 	r.NotFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {

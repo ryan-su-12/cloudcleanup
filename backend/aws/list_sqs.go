@@ -5,9 +5,10 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/sqs"
+	"cloudcleanup/backend/models" // adjust as per actual module path
 )
 
-func FetchSQSQueues(cfg aws.Config, resultChan chan []Resource, errorChan chan error) {
+func FetchSQSQueues(cfg aws.Config, resultChan chan []models.Resource, errorChan chan error) {
 	client := sqs.NewFromConfig(cfg)
 
 	resp, err := client.ListQueues(context.TODO(), &sqs.ListQueuesInput{})
@@ -16,10 +17,10 @@ func FetchSQSQueues(cfg aws.Config, resultChan chan []Resource, errorChan chan e
 		return
 	}
 
-	var resources []Resource
+	var resources []models.Resource
 	if resp.QueueUrls != nil {
 		for _, url := range resp.QueueUrls {
-			resources = append(resources, Resource{
+			resources = append(resources, models.Resource{
 				ID:   url,
 				Type: "sqs",
 			})
