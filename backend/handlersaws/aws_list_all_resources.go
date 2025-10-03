@@ -10,7 +10,7 @@ import (
 	"cloudcleanup/backend/aws"    // FetchEC2Instances, FetchS3Buckets, etc.
 )
 
-// Struct to receive user credentials and region
+
 type AWSRequestCommon struct {
 	AccessKey string `json:"accessKey"`
 	SecretKey string `json:"secretKey"`
