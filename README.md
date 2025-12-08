@@ -5,3 +5,9 @@ Create a Go tool that scans an AWS account for unused or underutilized resources
 #### Why I am making this project
 ---
 because i think its cool 
+
+#### Tech Stack
+---
+Go, TypeScript, Tailwind
+Mux, Next.js
+AWS-SDK
